@@ -1,0 +1,143 @@
+Showing <%= from %> - <%= to %> / <%= total %> entries
+<% if(total > 25) { %>
+<nav aria-label="Page navigation example" style="padding:0px 0px  0px 300px;">
+    <ul class="pagination pg-blue">
+        <% if(pageCount >= 3) { %>
+        <% if(pageNum > 1) { %>
+        <li <% if(pageNum == 1) { %> class="disabled" <% } %>>
+            <a 
+            <% if(queryValue !== null ) { %>
+            href="<%= url %>&page=1"
+            <% } else { %>
+                href="<% url %>?page=1"
+            <% } %> >
+            First
+            </a>
+        </li>
+        <% } %>
+
+        <% if(pageNum != 1) { %>
+            <li <% if(pageNum == 1) { %> class="disabled" <% } %> >
+                <a 
+                <% if(pageNum == 1){ %> 
+                    href="#" 
+                <% } else { %> 
+                    <% if(queryValue !== null ) { %>
+                    href="<%= url %>&page=<%= pageNum - 1 %>"
+                    <% } else { %>
+                        href="<% url %>?page=<%= pageNum - 1 %>"
+                    <% } %>
+                <% } %> >
+                    &laquo;
+                </a>
+            </li>
+        <% } %>
+
+        <% if(pageNum - backPageRange > 1) { %>
+        <li class="page-item"><a class="page-link">. . . . .</a></li>
+        <% } %>
+
+        <% for(var i = backPageRange ; i > 0; i--){ %>
+        <% if((pageNum - i) >= 2) { %>
+        <li>
+            <a 
+            <% if(queryValue !== null ) { %>
+                href="<%= url %>&page=<%= pageNum - i %>"
+            <% } else { %>
+                href="<% url %>?page=<%= pageNum - i %>"
+            <% } %>             
+            >
+                <%= pageNum - i %>
+            </a>
+        </li>
+        <% } %>
+        <% } %>
+
+        <li class="active">
+            <a 
+            <% if(queryValue !== null ) { %>
+                href="<%= url %>&page=<%= pageNum %>"
+            <% } else { %>
+                href="<% url %>?page=<%= pageNum %>"
+            <% } %>               
+            >
+                <%= pageNum %>
+            </a>
+        </li>
+
+        <% for(i = 1; pageNum + i < pageNum + 1 + frontPageRange; i++) { %>
+        <% if(pageNum + i < pageCount && pageNum + i > 1) { %>
+        <li>
+            <a 
+            <% if(queryValue !== null ) { %>
+                href="<%= url %>&page=<%= pageNum + i %>"
+            <% } else { %>
+                href="<% url %>?page=<%= pageNum + i %>"
+            <% } %> 
+            >
+                <%= pageNum + i %>
+            </a>
+        </li>
+        <% } %>
+        <% } %>
+
+        <% if(i < pageCount && pageNum !== pageCount) { %>
+        <li class="page-item"><a class="page-link">. . . . .</a></li>
+        <% } %>
+
+        <% if(pageNum != pageCount) { %>
+        <li <% if(pageNum == pageCount) { %> class="disabled" <% } %>>
+            <a 
+                <% if(pageNum == pageCount){ %> 
+                    href="#" 
+                <% } else { %>
+                    <% if(queryValue !== null ) { %>
+                        href="<%= url %>&page=<%= pageNum + 1 %>"
+                    <% } else { %>
+                        href="<% url %>?page=<%= pageNum + 1 %>"
+                    <% } %>                    
+                <% } %>
+            >&raquo;</a></li>
+        <% } %>
+        <% if(pageNum < pageCount) { %>
+        <li <% if(pageNum == pageCount) { %> class="disabled" <% } %>> 
+            <a 
+                <% if(queryValue !== null ) { %>
+                    href="<%= url %>&page=<%= pageCount %>"
+                <% } else { %>
+                    href="<% url %>?page=<%= pageCount %>"
+                <% } %>                
+                >
+                Last
+            </a>
+        </li>
+        <% } %>
+        <% } else { %>
+
+        <li <% if(pageNum == 1) { %> class="disabled" <% } %> >
+            <a 
+            <% if(queryValue !== null ) { %>
+                href="<%= url %>&page=1"
+                <% } else { %>
+                    href="<% url %>?page=1"
+                <% } %>
+            >
+            &laquo;
+            </a>
+        </li>
+        <li <% if(pageNum == 2) { %> class="disabled" <% } %>>
+            <a             
+            <% if(queryValue !== null ) { %>
+                href="<%= url %>&page=2"
+                <% } else { %>
+                    href="<% url %>?page=2"
+                <% } %>
+            >
+            &raquo;
+            </a>
+        </li>
+
+        <% } %>
+    </ul>
+</nav>
+<% } %>

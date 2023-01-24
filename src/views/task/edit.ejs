@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Edit Task</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Task</h2>
+  <%- include('../partials/messages.ejs') %>
+
+  <form action="/task/<%= task.id %>?_method=PUT" method="post" enctype="application/x-www-form-urlencoded">
+    <div class="form-group">
+      <label for=""> Name <span style="color:red;">*</span></label>
+      <input type="text" name="name" value="<%= task.name %>" class="form-control" id="">
+    </div>
+    <div class="form-group">
+      <label for="">Short Description <span style="color:red;">*</span></label>
+      <input type="text" name="short_description" value="<%= task.short_description %>" class="form-control" id="">
+    </div>
+    <div class="form-group">
+      <label for="">Date Time <span style="color:red;">*</span></label>
+    <div class='input-group date' id='datetimepicker1'>
+      <input type='text' name="date_time" value="<%= moment(task.date_time).format('yyyy-MM-DD, h:mm:ss a') %>" class="form-control" />
+      <span class="input-group-addon">
+      <span class="glyphicon glyphicon-calendar"></span>
+      </span>
+   </div>
+  </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a class="btn btn-danger" href="/task" role="button">Cancel</a>
+
+  </form>
+</div>
+<%- include('../partials/script.ejs') %>
+
+</body>
+</html>

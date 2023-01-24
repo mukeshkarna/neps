@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/header') %>
+
+  <body>
+    <div id="app">
+
+      <%- include('../partials/sidebar') %>
+
+        <div id="main">
+
+          <%- include('../partials/navbar') %>
+
+            <div class="main-content container-fluid">
+              <%- include('../partials/breadcrumb') %>
+
+                <section class="section">
+                  <%- body %>
+                </section>
+            </div>
+
+            <%- include('../partials/footer') %>
+        </div>
+    </div>
+    <%- include('../partials/script') %>
+  </body>
+
+</html>

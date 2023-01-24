@@ -1,0 +1,39 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+
+<script src="/js/feather-icons/feather.min.js"></script>
+<script src="/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/js/app.js"></script>
+
+<script src="/vendors/quill/quill.min.js"></script>
+<script src="/js/pages/form-editor.js"></script>
+
+<script src="/vendors/chartjs/Chart.min.js"></script>
+<script src="/vendors/dayjs/dayjs.min.js"></script>
+<!-- <script src="js/pages/ui-chartjs.js"></script> -->
+<!-- <script src="vendors/apexcharts/apexcharts.min.js"></script> -->
+<script src="/js/pages/dashboard.js"></script>
+
+
+<script src="/vendors/simple-datatables/simple-datatables.js"></script>
+<script src="/js/vendors.js"></script>
+
+<!-- Include Choices JavaScript -->
+<script src="/vendors/choices.js/choices.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<script>
+  $(function () {
+    $('.year').text(moment().format('Y'));
+    
+    $('#datetimepicker1').datetimepicker({
+      format: 'YYYY-MM-DD hh:mm:ss'
+    });
+  });
+</script>

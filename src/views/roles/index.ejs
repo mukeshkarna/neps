@@ -1,0 +1,38 @@
+<div class="card">
+  <div class="card-header">
+    Users
+  </div>
+  <div class="card-body">
+    <table class='table table-striped' id="table1">
+      <thead>
+        <tr>
+          <th>S.N.</th>
+          <th>Name</th>
+          <th>Slug</th>
+          <th>Description</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if(roles.length> 0){
+          myval = 0;
+          roles.forEach(function(role) {
+          %>
+          <tr>
+            <td>
+              <%= myval +=1 %>
+            </td>
+            <td><%= role.role_name %></td>
+            <td><%= role.slug %></td>
+            <td><%= role.role_description %></td>
+            <td>
+              <a href="/roles/<%= role.id %>/edit" class="btn icon btn-primary"><i data-feather="edit"></i></a>
+              <a href="#" class="btn icon btn-danger"><i data-feather="delete"></i></a>
+              <a href="/roles/<%= role.id %>" class="btn icon btn-success"><i data-feather="info"></i></a>
+            </td>
+          </tr>
+          <% }) }%>
+      </tbody>
+    </table>
+  </div>
+</div>

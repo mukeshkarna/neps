@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-header">
+    Users
+  </div>
+  <div class="card-body">
+    <table class='table table-striped' id="table1">
+      <thead>
+        <tr>
+          <th>S.N.</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if(permissions.length> 0){
+          myval = 0;
+          permissions.forEach(function(permission) {
+          %>
+          <tr>
+            <td>
+              <%= myval +=1 %>
+            </td>
+            <td>
+              <%= permission.perm_name %>
+            </td>
+            <td><%= permission.perm_description %></td>
+            <td>
+              <a href="#" class="btn icon btn-primary"><i data-feather="edit"></i></a>
+              <a href="#" class="btn icon btn-danger"><i data-feather="delete"></i></a>
+            </td>
+          </tr>
+          <% }) }%>
+      </tbody>
+    </table>
+  </div>
+</div>

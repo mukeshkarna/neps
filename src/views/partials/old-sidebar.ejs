@@ -1,0 +1,75 @@
+<!-- <% const templates = template[0]; %>
+<div class="nav-sidebar">
+  <div class="inner-navbar clearfix">
+    <ul class="ul-sidebar" id="accordion">
+      <% modulePermissions.forEach(function(modulePermission) { %>
+        <%= modulePermission.module %>
+      <%
+        var match_url = url.match('^[^?]*')[0] ;
+        var collapsed = 'collapsed';
+        var collapsed_in = '';
+      %>
+
+      <% for (var subPage in modulePermission.subPages) { %>
+
+      <% if (match_url=='/'+subPage) {%>
+      <%  collapsed = ''; %>
+      <%  collapsed_in = 'in'; %>
+      <%  break;%>
+      <% } %>
+      <% }%>
+
+      <li <% if(match_url == '/'+modulePermission.id || collapsed_in=='in') {%> class="active"<% } %> >
+        <%if (modulePermission.enableDropdown) { %>
+        <a data-toggle="collapse" data-parent="#accordion" href="#sidenavlanguage_<%= modulePermission.id %>"
+          class="arw <%= collapsed %>">
+          <% }else { %>
+          <a href="/<%= modulePermission.id %>">
+            <% }%>
+            <i class="<%= modulePermission.icon %>" aria-hidden="true">
+
+            </i><span class="span-link"> <%= modulePermission.title %></span>
+
+          </a>
+
+          <%if (modulePermission.enableDropdown) { %>
+
+          <ul id="sidenavlanguage_<%= modulePermission.id %>" class="collapse ul-sidebar <%= collapsed_in %>">
+            <% for (var subPage in modulePermission.subPages) { %>
+            <li <% if(match_url == '/'+subPage) {%> class="active"<% } %>><a href="/<%=  subPage %>"><%=  modulePermission.subPages[subPage] %></a></li>
+            <% }%>
+
+          </ul>
+          <% } %>
+      </li>
+      <% }); %>
+    </ul>
+    <a class="toggle-button" role="button" title="Toggle sidebar"
+      type="button"><span>Collapse Sidebar</span></a>
+  </div>
+</div> -->
+
+
+<!-- <nav class="page-sidebar">
+  <ul class="side-menu metismenu scroller">
+    {{#each modulePermissions}}
+    <li>
+      <a href="{{#if enableDropdown}}javascript:;{{else}}/{{id}}{{/if}}">
+        <i class="sidebar-item-icon {{icon}}"></i>
+        <span class="nav-label">{{translateLanguage title ../session.translationdata ../session.worddata}}</span>
+        {{#if enableDropdown}}
+        <i class="fa fa-angle-left arrow"></i>
+        {{/if}}
+      </a>
+      {{#if enableDropdown}}
+        <ul class="nav-2-level collapse">
+          {{#each subPages}}
+            <li><a href="/{{../id}}/{{@key}}">{{translateLanguage this ../../session.translationdata ../../session.worddata}}</a></li>
+          {{/each}}
+        </ul>
+      {{/if}}
+    </li>
+    {{/each}}
+
+  </ul>
+</nav> -->

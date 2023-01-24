@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-header">
+    Users
+  </div>
+  <div class="card-body">
+    <table class='table table-striped' id="table1">
+      <thead>
+        <tr>
+          <th>S.N.</th>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if(role.permissions.length> 0){
+          myval = 0;
+          role.permissions.forEach(function(perm) {
+          %>
+          <tr>
+            <td>
+              <%= myval +=1 %>
+            </td>
+            <td>
+              <%= perm.perm_name %>
+            </td>
+            <td><%= perm.perm_description %></td>
+          </tr>
+          <% }) }%>
+      </tbody>
+    </table>
+  </div>
+</div>
