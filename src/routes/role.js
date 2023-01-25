@@ -7,7 +7,7 @@ const roleController = require('../controller/roleController');
 router.get('/', roleController.index);
 
 // Create view of a new Role
-router.get('/:id/create', roleController.createView);
+router.get('/create', roleController.createView);
 
 // Create a new Role
 router.post('/create', roleController.store);

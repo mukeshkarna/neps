@@ -97,7 +97,7 @@ let apiAuthController = {
    *          simply used as input to other model functions.
    */
   getUser: function (username, password) {
-    return OAuthUsersModel.findOne({ where: { username: username } }).then(
+    return OAuthUsersModel.findOne({ where: { email: username } }).then(
       user => {
         const isMatch = bcrypt.compareSync(password, user.get().password);
         if (isMatch) {
@@ -119,7 +119,7 @@ let apiAuthController = {
    * @param {String} token.refreshToken The refresh token to be saved.
    * @param {Date} token.refreshTokenExpiresAt The expiry time of the refresh token.
    * @param {String} token.scope The authorized scope of the token(s).
-   * 
+   *
    * @param {Object} client The client associated with the token(s).
    * @param {Object} user The user associated with the token(s).
    */
@@ -156,7 +156,6 @@ let apiAuthController = {
    * @returns {Boolean} Return true if the revocation was successful or false if the refresh token could not be found.
    */
   revokeToken: function (token) {
-    console.log('Revoke token');
     return OAuthTokensModel.findOne({
       where: { refreshToken: token.refreshToken },
     })

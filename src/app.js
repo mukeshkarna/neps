@@ -40,11 +40,10 @@ expressLoader.init = async app => {
   app.use(morgan('dev'));
 
   app.use(async (req, res, next) => {
-    res.locals['error_msg'] = req.flash('error_msg');
+    res.locals.error_msg = req.flash('error_msg');
     res.locals.inputData = req.flash('inputData')[0];
-    res.locals['error_arr'] = req.flash('error_arr');
-    res.locals['success_msg'] = req.flash('success_msg');
-    res.locals['error_excel'] = req.flash('error_excel');
+    res.locals.error_arr = req.flash('error_arr');
+    res.locals.success_msg = req.flash('success_msg');
     res.locals.errors = req.flash('errors');
     res.locals.query = req.query;
     res.locals.url = req.url;

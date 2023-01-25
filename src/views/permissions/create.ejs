@@ -1,0 +1,42 @@
+<!-- Basic Horizontal form layout section start -->
+<section id="basic-horizontal-layouts">
+  <div class="row match-height">
+    <div class="col-md-12 col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title"><%= title %></h4>
+        </div>
+        <div class="card-content">
+          <div class="card-body">
+            <%- include('../partials/messages') %>
+            <form class="form form-horizontal">
+              <div class="form-body" method="post" action="/permissions/create">
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Permission Name</label>
+                  </div>
+                  <div class="col-md-8 form-group">
+                    <input type="text" id="perm_name" class="form-control" name="perm_name"
+                      placeholder="Permission Name">
+                  </div>
+                  <div class="col-md-4">
+                    <label>Permission Description</label>
+                  </div>
+                  <div class="col-md-8 form-group">
+                    <input type="text" id="perm_description" class="form-control" name="perm_description"
+                      placeholder="Permission Description">
+                  </div>
+                  <div class="col-sm-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary mr-1 mb-1">Submit</button>
+                    <a href="/permissions" class="btn btn-light-secondary mr-1 mb-1">Back</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- // Basic Horizontal form layout section end -->

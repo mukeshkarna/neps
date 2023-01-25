@@ -29,8 +29,8 @@
                     <label>Role Description</label>
                   </div>
                   <div class="col-md-8 form-group">
-                    <input type="text" id="first-name" class="form-control" name="role_description" placeholder="Role Description"
-                      value="<%= role.role_description %>">
+                    <input type="text" id="first-name" class="form-control" name="role_description"
+                      placeholder="Role Description" value="<%= role.role_description %>">
                   </div>
                   <div class="col-md-4">
                     <label>Permissions</label>
@@ -41,8 +41,9 @@
                         <li class="d-inline-block mr-2 mb-1">
                           <div class='form-check'>
                             <div class="checkbox">
-                              <input type="checkbox" id="checkbox<%= role.id %>" name="premissions[]" class='form-check-input' <%
-                                if(role.permissions.findIndex((x)=> x.perm_name == permission.perm_name) != -1) { %>
+                              <input type="checkbox" id="checkbox<%= role.id %>" name="premissions[]"
+                                class='form-check-input' <% if(role.permissions.findIndex((x)=> x.perm_name ==
+                              permission.perm_name) != -1) { %>
                               checked
                               <% } %>
                                 >

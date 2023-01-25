@@ -1,6 +1,14 @@
 <div class="card">
   <div class="card-header">
-    Users
+    <div class="d-flex justify-content-between">
+      <div>
+        <%= title %>
+      </div>
+
+      <div>
+        <a href="/permissions/create" class="btn icon btn-info"><i data-feather="plus"></i></a>
+      </div>
+    </div>
   </div>
   <div class="card-body">
     <table class='table table-striped' id="table1">
@@ -24,10 +32,14 @@
             <td>
               <%= permission.perm_name %>
             </td>
-            <td><%= permission.perm_description %></td>
             <td>
-              <a href="#" class="btn icon btn-primary"><i data-feather="edit"></i></a>
+              <%= permission.perm_description %>
+            </td>
+            <td>
+              <a href="/permissions/<%= permission.id %>/edit" class="btn icon btn-primary"><i
+                  data-feather="edit"></i></a>
               <a href="#" class="btn icon btn-danger"><i data-feather="delete"></i></a>
+              <a href="/permissions/<%= permission.id %>" class="btn icon btn-success"><i data-feather="info"></i></a>
             </td>
           </tr>
           <% }) }%>

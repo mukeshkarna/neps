@@ -1,17 +1,18 @@
 
 <% if (error_msg && error_msg.length > 0) { %>
     <div class="alert alert-danger alert-dismissible">
-        <span><%- error_msg%></span>
+        <span><%- error_msg %></span>
 
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
 <% } else if (success_msg && success_msg.length > 0) { %>
-
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-     <%- success_msg %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <%- success_msg %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 <% } else if (errors && errors.length > 0) {
     errors.forEach(function(err, key){
@@ -32,9 +33,9 @@
                         </button>
                     </div>
 
-                <% }
+                <% } 
             }
         }
     });
-}%>
-
+}
+%>

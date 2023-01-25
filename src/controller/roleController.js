@@ -3,6 +3,8 @@ const User = require('../models').User;
 const Role = require('../models').Role;
 const Permission = require('../models').Permission;
 
+const { CREATED, UPDATED, DELETED, FAILED } = require('../utils/flashMessages');
+
 const CheckPermission = require('../helpers/checkPermission');
 const checkPermission = new CheckPermission();
 
@@ -15,12 +17,12 @@ let roleController = {
       );
 
       if (!rolePerm) {
-        req.redirect('403');
+        return res.redirect('403');
       }
       const roles = await Role.findAll();
 
       if (roles) {
-        return res.render('roles', {
+        res.render('roles', {
           ...config.layouts.main,
           roles,
           title: 'Roles',
@@ -29,7 +31,8 @@ let roleController = {
       }
     } catch (error) {
       console.log(error);
-      return req.flash('error_msg', 'something went wrong' + error);
+      req.flash('error_msg', FAILED + error);
+      res.redirect('/roles');
     }
   },
 
@@ -37,74 +40,107 @@ let roleController = {
     try {
       const rolePerm = await checkPermission.checkPermission(
         req.user.role_id,
-        'role_edit'
+        'role_create'
       );
 
       if (!rolePerm) {
-        req.redirect('403');
+        return res.redirect('403');
       }
 
-      res.render('roles/create');
+      const permissions = await Permission.findAll();
+
+      res.render('roles/create', {
+        ...config.layouts.main,
+        permissions,
+        title: 'Create Role',
+        breadcrumbs: [
+          { url: '/roles', title: 'Roles' },
+          { url: `javascript::void(0)`, title: 'Create Role' },
+        ],
+      });
     } catch (error) {
-      req.flash('error_msg', 'something went wrong');
+      if (error.message == 'Forbidden') {
+        res.redirect('403');
+      } else {
+        console.log(error);
+        req.flash('error_msg', FAILED + error);
+        res.redirect('400');
+      }
     }
   },
 
   // Create a new Role
   store: async (req, res, next) => {
-    const rolePerm = await checkPermission.checkPermission(
-      req.user.role_id,
-      'role_add'
-    );
+    try {
+      const rolePerm = await checkPermission.checkPermission(
+        req.user.role_id,
+        'role_add'
+      );
 
-    if (!rolePerm) {
-      req.redirect('403');
-    }
+      if (!rolePerm) {
+        return res.redirect('403');
+      }
 
-    if (!req.body.role_name || !req.body.role_description) {
-      res.status(400).send({
-        msg: 'Please pass Role name or description.',
-      });
-    } else {
-      Role.create({
-        role_name: req.body.role_name,
-        role_description: req.body.role_description,
-      })
-        .then(role => res.status(201).send(role))
-        .catch(error => {
-          console.log(error);
-          res.status(400).send(error);
+      if (!req.body.role_name || !req.body.role_description) {
+        res.status(400).send({
+          msg: 'Please pass Role name or description.',
         });
+      } else {
+        Role.create({
+          role_name: req.body.role_name,
+          role_description: req.body.role_description,
+        })
+          .then(role => res.status(201).send(role))
+          .catch(error => {
+            console.log(error);
+            res.status(400).send(error);
+          });
+
+        req.flash('success_msg', CREATED);
+        res.redirect('/roles');
+      }
+    } catch (error) {
+      if (error.message == 'Forbidden') {
+        res.redirect('403');
+      } else {
+        req.flash('error_msg', FAILED);
+        res.redirect('back');
+      }
     }
   },
 
   // Get List of Roles
   getRoles: async (req, res, next) => {
-    checkPermission
-      .checkPermission(req.user.role_id, 'role_index')
-      .then(rolePerm => {
-        console.log(rolePerm);
+    try {
+      const rolePerm = await checkPermission.checkPermission(
+        req.user.role_id,
+        'role_index'
+      );
 
-        Role.findAll({
-          include: [
-            {
-              model: Permission,
-              as: 'permissions',
-            },
-            {
-              model: User,
-              as: 'users',
-            },
-          ],
-        })
-          .then(roles => res.status(200).send(roles))
-          .catch(error => {
-            res.status(400).send(error);
-          });
-      })
-      .catch(error => {
-        res.status(403).send(error);
+      if (!rolePerm) {
+        return res.redirect('403');
+      }
+
+      await Role.findAll({
+        include: [
+          {
+            model: Permission,
+            as: 'permissions',
+          },
+          {
+            model: User,
+            as: 'users',
+          },
+        ],
       });
+    } catch (error) {
+      if (error.message == 'Forbidden') {
+        res.redirect('403');
+      } else {
+        req.flash('error_msg', FAILED);
+        res.redirect('/roles');
+      }
+    }
   },
 
   // Get Role by ID
@@ -116,7 +152,7 @@ let roleController = {
       );
 
       if (!rolePerm) {
-        req.redirect('403');
+        return res.redirect('403');
       }
 
       const role = await Role.findByPk(req.params.id, {
@@ -127,14 +163,13 @@ let roleController = {
       });
 
       if (role) {
-        return res.render('roles/permissions', {
+        res.render('roles/permissions', {
           ...config.layouts.main,
           role,
           title: 'Role Permissions',
           breadcrumbs: [
             { url: '/roles', title: 'Roles' },
             { url: `javascript::void(0)`, title: 'Role Permissions' },
-            // { url: `/roles/${role.id}`, title: 'Role Permissions' },
           ],
         });
       }
@@ -143,6 +178,7 @@ let roleController = {
         res.redirect('403');
       } else {
         console.log(error);
+        req.flash('error_msg', FAILED + error);
         res.redirect('400');
       }
     }
@@ -156,7 +192,7 @@ let roleController = {
       );
 
       if (!rolePerm) {
-        req.redirect('403');
+        return res.redirect('403');
       }
 
       const role = await Role.findByPk(req.params.id, {
@@ -166,14 +202,14 @@ let roleController = {
         },
       });
 
-      const permissions = await Permission.findAll();
-
       if (!role) {
-        req.flash('error_msg', 'Data not found');
+        req.flash('error_msg', 'Role not found');
         return res.redirect('back');
       }
 
-      return res.render('roles/edit', {
+      const permissions = await Permission.findAll();
+
+      res.render('roles/edit', {
         ...config.layouts.main,
         role,
         permissions,
@@ -187,134 +223,137 @@ let roleController = {
       if (error.message == 'Forbidden') {
         res.redirect('403');
       } else {
-        console.log(error);
-        res.redirect('400');
+        req.flash('error_msg', FAILED + error);
+        res.redirect('back');
       }
     }
   },
 
   // Update a Role
   update: async (req, res, next) => {
-    checkPermission
-      .checkPermission(req.user.role_id, 'role_update')
-      .then(rolePerm => {
-        if (
-          !req.params.id ||
-          !req.body.role_name ||
-          !req.body.role_description
-        ) {
-          res.status(400).send({
-            msg: 'Please pass Role ID, name or description.',
-          });
-        } else {
-          Role.findByPk(req.params.id)
-            .then(role => {
-              Role.update(
-                {
-                  role_name: req.body.role_name || role.role_name,
-                  role_description:
-                    req.body.role_description || role.role_description,
-                },
-                {
-                  where: {
-                    id: req.params.id,
-                  },
-                }
-              )
-                .then(_ => {
-                  res.status(200).send({
-                    message: 'Role updated',
-                  });
-                })
-                .catch(err => res.status(400).send(err));
-            })
-            .catch(error => {
-              res.status(400).send(error);
-            });
-        }
-      })
-      .catch(error => {
-        res.status(403).send(error);
-      });
+    try {
+      const rolePerm = await checkPermission.checkPermission(
+        req.user.role_id,
+        'role_update'
+      );
+
+      if (!rolePerm) {
+        return res.redirect('403');
+      }
+
+      if (!req.params.id || !req.body.role_name || !req.body.role_description) {
+        req.flash('error_msg', 'Please pass Role ID, name or description.');
+        return res.redirect('back');
+      } else {
+        const role = await Role.findByPk(req.params.id);
+        await Role.update(
+          {
+            role_name: req.body.role_name || role.role_name,
+            role_description:
+              req.body.role_description || role.role_description,
+          },
+          {
+            where: {
+              id: req.params.id,
+            },
+          }
+        );
+
+        req.flash('success_msg', UPDATED);
+        res.redirect('/roles');
+      }
+    } catch (error) {
+      if (error.message == 'Forbidden') {
+        res.redirect('403');
+      } else {
+        req.flash('error_msg', FAILED + error);
+        res.redirect('back');
+      }
+    }
   },
 
   // Delete a Role
   delete: async (req, res, next) => {
-    checkPermission
-      .checkPermission(req.user.role_id, 'role_delete')
-      .then(rolePerm => {
-        if (!req.params.id) {
-          res.status(400).send({
-            msg: 'Please pass role ID.',
+    try {
+      const rolePerm = await checkPermission.checkPermission(
+        req.user.role_id,
+        'role_delete'
+      );
+
+      if (!rolePerm) {
+        return res.redirect('403');
+      }
+
+      if (!req.params.id) {
+        req.flash('error_msg', 'Please pass role ID.');
+        return res.redirect('back');
+      } else {
+        const role = await Role.findByPk(req.params.id);
+
+        if (role) {
+          await Role.destroy({
+            where: {
+              id: req.params.id,
+            },
           });
         } else {
-          Role.findByPk(req.params.id)
-            .then(role => {
-              if (role) {
-                Role.destroy({
-                  where: {
-                    id: req.params.id,
-                  },
-                })
-                  .then(_ => {
-                    res.status(200).send({
-                      message: 'Role deleted',
-                    });
-                  })
-                  .catch(err => res.status(400).send(err));
-              } else {
-                res.status(404).send({
-                  message: 'Role not found',
-                });
-              }
-            })
-            .catch(error => {
-              res.status(400).send(error);
-            });
+          req.flash('error_msg', 'Role not found');
+          res.redirect('back');
         }
-      })
-      .catch(error => {
-        res.status(403).send(error);
-      });
+      }
+    } catch (error) {
+      if (error.message == 'Forbidden') {
+        req.flash('error_msg', FAILED + error.message);
+        res.redirect('403');
+      } else {
+        req.flash('error_msg', FAILED + error.message);
+        res.redirect('back');
+      }
+    }
   },
 
   // Add Permissions to Role
   addPermission: async (req, res, next) => {
-    checkPermission
-      .checkPermission(req.user.role_id, 'permission_add')
-      .then(rolePerm => {
-        if (!req.body.permissions) {
-          res.status(400).send({
-            msg: 'Please pass permissions.',
-          });
-        } else {
-          Role.findByPk(req.params.id)
-            .then(role => {
-              req.body.permissions.forEach(function (item, index) {
-                Permission.findByPk(item)
-                  .then(async perm => {
-                    await role.addPermissions(perm, {
-                      through: {
-                        selfGranted: false,
-                      },
-                    });
-                  })
-                  .catch(error => {
-                    res.status(400).send(error);
-                  });
-              });
-              res.status(200).send({
-                message: 'Permissions added',
-              });
-            })
-            .catch(error => {
-              res.status(400).send(error);
-            });
+    try {
+      const rolePerm = await checkPermission.checkPermission(
+        req.user.role_id,
+        'permission_add'
+      );
+
+      if (!rolePerm) {
+        return res.redirect('403');
+      }
+
+      if (!req.body.permissions) {
+        return req.flash('error_msg', FAILED);
+      } else {
+        const role = await Role.findByPk(req.params.id);
+
+        if (!role) {
+          req.flash('error_msg', FAILED);
+          return res.redirect('back');
         }
-      })
-      .catch(error => {
-        res.status(403).send(error);
-      });
+        req.body.permissions.forEach(async (item, index) => {
+          const perm = Permission.findByPk(item);
+          await role.addPermissions(perm, {
+            through: {
+              selfGranted: false,
+            },
+          });
+        });
+
+        req.flash('success_msg', CREATED);
+        res.redirect('/roles');
+      }
+    } catch (error) {
+      if (error.message == 'Forbidden') {
+        req.flash('error_msg', FAILED + error.message);
+        res.redirect('403');
+      } else {
+        req.flash('error_msg', FAILED + error.message);
+        res.redirect('back');
+      }
+    }
   },
 };
 module.exports = roleController;
